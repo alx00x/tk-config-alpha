@@ -1,0 +1,11 @@
+# COMP root
+primary: {linux_path: null, mac_path: null, windows_path: 'Y:\PRODUCTIONS'}
+
+# 3D root
+secondary: {linux_path: null, mac_path: null, windows_path: 'Z:\PRODUCTIONS'}
+
+# COMP OUTPUT root
+tertiary: {linux_path: null, mac_path: null, windows_path: 'V:\PRODUCTIONS'}
+
+# SIM root
+quaternary: {linux_path: null, mac_path: null, windows_path: 'S:\PRODUCTIONS'}

@@ -1,0 +1,801 @@
+# Copyright (c) 2015 Shotgun Software Inc.
+#
+# CONFIDENTIAL AND PROPRIETARY
+#
+# This work is provided "AS IS" and subject to the Shotgun Pipeline Toolkit
+# Source Code License included in this distribution package. See LICENSE.
+# By accessing, using, copying or modifying this work you indicate your
+# agreement to the Shotgun Pipeline Toolkit Source Code License. All rights
+# not expressly granted therein are reserved by Shotgun Software Inc.
+
+#
+# This file is one of the central points in the Shotgun Pipeline Toolkit configuration and
+# a counterpart to the folder configuration structure.
+#
+# The folder structure underneath the project folder is used to create folders on disk -
+# templates.yml (this file) refers to those folders. Therefore, the two files need to be
+# in sync. This file contains an overview of all locations that are used by Sgtk.
+#
+# Whenever an app or an engine refers to a location on disk, it is using an entry defined in
+# this file. For more information, see the Shotgun Pipeline Toolkit Documentation.
+
+
+
+#
+# The keys section contains the definitions for all the different keys that are being
+# used by Sgtk. A key is a magic token that is replaced by a value at runtime, for example
+# {Shot}. The section below tells Sgtk which data types and formats to expect for each key.
+#
+keys:
+    Sequence:
+        type: str
+    Shot:
+        type: str
+    Step:
+        type: str
+    # CRATER addition ================================================================================================
+    Task:
+        type: str
+    cam_name:
+        type: str        
+    #=====================================================================================================================
+    sg_asset_type:
+        type: str
+    Asset:
+        type: str
+    name:
+        type: str
+        filter_by: alphanumeric
+    iteration:
+        type: int
+    version:
+        type: int
+        format_spec: "03"
+    version_four:
+       type: int
+       format_spec: "04"
+       alias: version
+    timestamp:
+        type: str
+    width:
+        type: int
+    height:
+        type: int
+    segment_name:
+        type: str
+
+    # Represents the optional output name for frames written by the Shotgun Write Node
+    nuke.output:
+        alias: output
+        type: str
+        filter_by: alphanumeric
+
+    SEQ:
+        type: sequence
+        format_spec: "04"
+    eye:
+        type: str
+
+    houdini.node:
+        alias: node
+        type: str
+    aov_name:
+        type: str
+
+    # these are used by the Hiero exporter and pipeline
+    YYYY:
+        type: int
+        format_spec: "04"
+    MM:
+        type: int
+        format_spec: "02"
+    DD:
+        type: int
+        format_spec: "02"
+        alias: DD
+    project:
+        type: str
+
+    # These are used for the Mari UDIM pipeline:
+    UDIM:
+        type: sequence
+        default: "<UDIM>"
+    mari.channel:
+        type: str
+        alias: channel
+    mari.layer:
+        type: str
+        alias: layer
+    mari.project_name:
+        type: str
+        alias: name
+    asset_name:
+        type: str
+        shotgun_entity_type: Asset
+        shotgun_field_name: code
+    task_name:
+        type: str
+        shotgun_entity_type: Task
+        shotgun_field_name: content
+
+    # Maya supports two extension types.
+    maya_extension:
+        type: str
+        choices:
+            ma: Maya Ascii (.ma)
+            mb: Maya Binary (.mb)
+        default: ma
+        alias: extension
+
+#
+# The paths section contains all the the key locations where files are to be stored
+# by Sgtk Apps. Each path is made up of several keys (like {version} or {shot}) and
+# these are defined in the keys section above.
+#
+# Apps use these paths as part of their configuration to define where on disk
+# different files should go.
+#
+# In this default configuration, all of the root_name keys will be set to 'primary'.
+# This is because the default configuration stores all its production data in a single
+# tree and hence uses a single root folder on disk. If you wanted to extend the
+# configuration to span multiple root points, for example because you want to store
+# renders on a different server, you could define an additional root in Shotgun, and
+# then switch any relevant templates to point to that one instead.
+#
+
+paths:
+
+    # Common  path definitions to use as shorthand in order to avoid repetitive and verbose
+    # templates. This also makes it easy to change any of the common root paths and have the
+    # changes apply to all templates that use them.
+    #
+    # These don't require the standard formatting (with definition and root_name) because they
+    # will be set within each template that uses the alias.
+    shot_root: sequences/{Sequence}/{Shot}/{Step}
+    asset_root: assets/{sg_asset_type}/{Asset}/{Step}
+    sequence_root: sequences/{Sequence}
+    # Crater addition ========================================================================
+    plugins_root: z:/PLUGINS_ROOT
+    shot_temp_data_root: sequences/{Sequence}/{Shot}/{Step}/{Task}/review/tmp_data
+    asset_temp_data_root: assets/{sg_asset_type}/{Asset}/{Step}/{Task}/review/tmp_data
+    # Shotgun scripts location
+    sg_scripts_path:
+        definition: '@plugins_root/shotgun_scripts'
+        root_name: 'secondary'
+    # review roots
+    shot_review_root: 
+        definition: 'sequences/{Sequence}/{Shot}/{Step}/{Task}/review'
+        root_name: 'secondary'
+    asset_review_root: 
+        definition: 'assets/{sg_asset_type}/{Asset}/{Step}/{Task}/review'
+        root_name: 'secondary'
+    houdini_shot_review_root: 
+        definition: 'sequences/{Sequence}/{Shot}/{Step}/{Task}/review'
+        root_name: 'quaternary'
+    houdini_asset_review_root: 
+        definition: 'assets/{sg_asset_type}/{Asset}/{Step}/{Task}/review'
+        root_name: 'quaternary'
+    nuke_shot_review_root: 
+        definition: 'sequences/{Sequence}/{Shot}/{Step}/{Task}/review'
+        root_name: 'primary'
+    nuke_asset_review_root: 
+        definition: 'assets/{sg_asset_type}/{Asset}/{Step}/{Task}/review'
+        root_name: 'primary'
+    #=========================================================================================
+
+
+    ##########################################################################################
+    # Project level paths
+    #
+        
+    ############################
+    # CRATER PLAYBLAST stuff ===================================================================================================
+    ############################
+    
+    #shot Playblast path for JPG image sequence which is used as a temporary step to create a shot quicktime playblast file
+    shot_playblastJPG:
+        definition: '@shot_review_root/tmp/{Shot}_{Step}_{Task}[_{name}]_v{version}'
+        root_name: 'secondary'
+    houdini_shot_playblastJPG:
+        definition: '@shot_review_root/tmp/{Shot}_{Step}_{Task}[_{name}]_v{version}'
+        root_name: 'quaternary'
+    nuke_shot_playblastJPG:
+        definition: '@shot_review_root/tmp/{Shot}_{Step}_{Task}[_{name}]_v{version}'
+        root_name: 'primary'
+    #shot quicktime playblast file 
+    shot_playblast:
+        definition: '@shot_review_root/{Shot}_{Step}_{Task}[_{name}]_v{version}.mov'
+        root_name: 'secondary'
+    houdini_shot_playblast:
+        definition: '@shot_review_root/{Shot}_{Step}_{Task}[_{name}]_v{version}.mov'
+        root_name: 'quaternary'
+    nuke_shot_playblast:
+        definition: '@shot_review_root/{Shot}_{Step}_{Task}[_{name}]_v{version}.mov'
+        root_name: 'primary'
+        
+        
+        
+    #asset Playblast path for JPG image sequence which is used as a temporary step to create a asset quicktime playblast file
+    asset_playblastJPG:
+        definition: '@asset_review_root/tmp/{Asset}_{Step}_{Task}[_{name}]_v{version}'
+        root_name: 'secondary'
+    houdini_asset_playblastJPG:
+        definition: '@asset_review_root/tmp/{Asset}_{Step}_{Task}[_{name}]_v{version}'
+        root_name: 'quaternary'
+    nuke_asset_playblastJPG:
+        definition: '@asset_review_root/tmp/{Asset}_{Step}_{Task}[_{name}]_v{version}'
+        root_name: 'primary'        
+    #asset quicktime playblast file 
+    asset_playblast:
+        definition: '@asset_review_root/{Asset}_{Step}_{Task}[_{name}]_v{version}.mov'
+        root_name: 'secondary'
+    houdini_asset_playblast:
+        definition: '@asset_review_root/{Asset}_{Step}_{Task}[_{name}]_v{version}.mov'
+        root_name: 'quaternary'
+    nuke_asset_playblast:
+        definition: '@asset_review_root/{Asset}_{Step}_{Task}[_{name}]_v{version}.mov'
+        root_name: 'primary'
+        
+        
+    #location for shots nuke playblast template    
+    playblast_nuke_template:
+        definition: 'sequences/shared/nuke_templates/playblast_template.nk'
+        root_name: 'secondary'
+    #if a project does not have shotsNukeTemplate then defaultShotsNukeTemplate is used
+    playblast_default_nuke_template:
+        definition: '@plugins_root/playblast_template/playblast_template_v002.nk'
+        root_name: 'secondary'
+        
+    #temp python files 
+#    temp_data_py:
+#        definition: '@shot_temp_data_root/{Shot}_{Step}_{Task}[_{name}]_v{version}.py'
+#        root_name: 'secondary'
+#    houdini_temp_data_py:
+#        definition: '@shot_temp_data_root/{Shot}_{Step}_{Task}[_{name}]_v{version}.py'
+#        root_name: 'quaternary'
+#    nuke_temp_data_py:
+#        definition: '@shot_temp_data_root/{Shot}_{Step}_{Task}[_{name}]_v{version}.py'
+#        root_name: 'primary'
+        
+    #deadline presets location
+    pb_dl_presets_job_info:
+        definition: '@plugins_root/deadline_presets/playblast/job_info.txt'
+        root_name: 'secondary'  
+    pb_dl_presets_plugin_info:
+        definition: '@plugins_root/deadline_presets/playblast/plugin_info_v02.txt'
+        root_name: 'secondary' 
+        
+    #deadline temp locations
+#    pb_dl_temp_job_info:
+#        definition: '@shot_temp_data_root/job_info.txt'
+#        root_name: 'secondary'
+#    houdini_pb_dl_temp_job_info:
+#        definition: '@shot_temp_data_root/job_info.txt'
+#        root_name: 'quaternary'
+#    nuke_pb_dl_temp_job_info:
+#        definition: '@shot_temp_data_root/job_info.txt'
+#        root_name: 'primary'
+        
+#    pb_dl_temp_postscript:
+#        definition: '@shot_temp_data_root/dlPostScript.py'
+#        root_name: 'secondary'
+#    houdini_pb_dl_temp_postscript:
+#        definition: '@shot_temp_data_root/dlPostScript.py'
+#        root_name: 'quaternary'
+#    nuke_pb_dl_temp_postscript:
+#        definition: '@shot_temp_data_root/dlPostScript.py'
+#        root_name: 'primary'
+        
+        
+    #==================================================================================================================
+    
+    
+    
+    ##############
+    # Hiero
+    ##############
+
+    # The location of WIP files
+    hiero_project_work:
+        definition: 'editorial/work/{name}_v{version}.hrox'
+        root_name: 'primary'
+    hiero_project_work_area:
+        definition: 'editorial/work'
+        root_name: 'primary'
+    # The location of backups of WIP files
+    hiero_project_snapshot:
+        definition: 'editorial/work/snapshots/{name}_v{version}_{timestamp}.hrox'
+        root_name: 'primary'
+    # The location of published hiero files
+    hiero_project_publish:
+        definition: 'editorial/publish/{name}_v{version}.hrox'
+        root_name: 'primary'
+    hiero_project_publish_area:
+        definition: 'editorial/publish'
+        root_name: 'primary'
+    
+
+    ##########################################################################################
+    # Sequence level paths
+    #
+
+
+    ###################################################################################################################################
+    # Shot level paths
+    ###################################################################################################################################
+
+    ##############
+    # Flame
+    ##############
+
+    flame_segment_clip:
+        definition: 'sequences/{Sequence}/{Shot}/finishing/clip/sources/{segment_name}.clip'
+        root_name: 'primary'
+    flame_shot_clip:
+        definition: 'sequences/{Sequence}/{Shot}/finishing/clip/{Shot}.clip'
+        root_name: 'primary'
+    flame_shot_batch:
+        definition: 'sequences/{Sequence}/{Shot}/finishing/batch/{Shot}.v{version}.batch'
+        root_name: 'primary'
+    flame_shot_render_dpx:
+        definition: 'sequences/{Sequence}/{Shot}/finishing/renders/{segment_name}_v{version}/{Shot}_{segment_name}_v{version}.{SEQ}.dpx'
+        root_name: 'primary'
+    flame_shot_render_exr:
+        definition: 'sequences/{Sequence}/{Shot}/finishing/renders/{segment_name}_v{version}/{Shot}_{segment_name}_v{version}.{SEQ}.exr'
+        root_name: 'primary'
+    flame_shot_comp_dpx:
+        definition: 'sequences/{Sequence}/{Shot}/finishing/comp/{segment_name}_v{version}/{Shot}_{segment_name}_v{version}.{SEQ}.dpx'
+        root_name: 'primary'
+    flame_shot_comp_exr:
+        definition: 'sequences/{Sequence}/{Shot}/finishing/comp/{segment_name}_v{version}/{Shot}_{segment_name}_v{version}.{SEQ}.exr'
+        root_name: 'primary'
+
+    ##############
+    # Photoshop
+    ##############
+
+    # The location of WIP files
+    photoshop_shot_work:
+        definition: '@shot_root/{Task}/photoshop/work/{Shot}_{Step}_{Task}[_{name}]_v{version}.psd'
+        root_name: 'secondary'
+    shot_work_area_photoshop:
+        definition: '@shot_root/{Task}/photoshop/work'
+        root_name: 'secondary'
+    # The location of backups of WIP files
+    photoshop_shot_snapshot:
+        definition: '@shot_root/{Task}/photoshop/work/snapshots/{Shot}_{Step}_{Task}[_{name}]_v{version}.{timestamp}.psd'
+        root_name: 'secondary'
+    # The location of published files
+    shot_publish_area_photoshop:
+        definition: '@shot_root/{Task}/photoshop/publish'
+        root_name: 'secondary'
+    photoshop_shot_publish:
+        definition: '@shot_root/{Task}/photoshop/publish/{Shot}_{Step}_{Task}[_{name}]_v{version}.psd'
+        root_name: 'secondary'
+
+
+    ##############
+    # Maya
+    ##############
+
+    # define the location of a work area
+    shot_work_area_maya:
+        definition: '@shot_root/{Task}/maya/work'
+        root_name: 'secondary'
+    # define the location of a publish area
+    shot_publish_area_maya:
+        definition: '@shot_root/{Task}/maya/publish'
+        root_name: 'secondary'
+    # The location of WIP files
+    maya_shot_work:
+        definition: '@shot_root/{Task}/maya/work/{Shot}_{Step}_{Task}[_{name}]_v{version}.{maya_extension}'
+        root_name: 'secondary'
+    # The location of backups of WIP files
+    maya_shot_snapshot:
+        definition: '@shot_root/{Task}/maya/work/snapshots/{Shot}_{Step}_{Task}[_{name}]_v{version}_{timestamp}.{maya_extension}'
+        root_name: 'secondary'
+    # The location of published maya files
+    maya_shot_publish:
+        definition: '@shot_root/{Task}/maya/publish/{Shot}_{Step}_{Task}[_{name}]_v{version}.{maya_extension}'
+        root_name: 'secondary'
+    # CRATER additions ================================================================================================
+    
+    # The location of published maya CAMERA files 
+    maya_shot_camera:
+        definition: '@shot_root/camera/{Shot}_{Step}_{Task}[_{name}]_{cam_name}_v{version}.ma'
+        root_name: 'secondary'
+    #==================================================================================================================
+
+
+        
+
+
+    ##############
+    # Houdini
+    ##############
+
+    # define the location of a work area
+    shot_work_area_houdini:
+        definition: '@shot_root/{Task}/houdini/work'
+        root_name: 'quaternary'
+    # define the location of a publish area
+    shot_publish_area_houdini:
+        definition: '@shot_root/{Task}/houdini/publish'
+        root_name: 'quaternary'
+    # The location of WIP files
+    houdini_shot_work:
+        definition: '@shot_root/{Task}/houdini/work/{Shot}_{Step}_{Task}[_{name}]_v{version}.hip'
+        root_name: 'quaternary'
+    # The location of backups of WIP files
+    houdini_shot_snapshot:
+        definition: '@shot_root/{Task}/houdini/work/snapshots/{Shot}_{Step}_{Task}[_{name}]_v{version}_{timestamp}.hip'
+        root_name: 'quaternary'
+    # The location of published houdini files
+    houdini_shot_publish:
+        definition: '@shot_root/{Task}/houdini/publish/{Shot}_{Step}_{Task}[_{name}]_v{version}.hip'
+        root_name: 'quaternary'
+    # Alembic caches
+    houdini_shot_work_alembic_cache:
+        definition: '@shot_root/{Task}/houdini/publish/alembic/{Shot}_{Step}_{Task}[_{name}]/{houdini.node}/v{version}/{Shot}_{Step}_{Task}[_{name}]_v{version}.abc'
+        root_name: 'quaternary'
+
+    # Rendered images
+    houdini_shot_render:
+        definition: '@shot_root/comp/renders/{Step}/{Task}/houdini/{Shot}_{Step}_{Task}[_{name}]/{houdini.node}/v{version}/{width}x{height}/{Shot}_{Step}_{Task}[_{name}]_v{version}.{SEQ}.exr'
+        root_name: 'primary'
+
+    # Additional mantra outputs
+    houdini_shot_ifd:
+        definition: '@shot_root/{Task}/houdini/ifds/{Shot}_{Step}_{Task}[_{name}]/{houdini.node}/v{version}/{width}x{height}/{Shot}_{Step}_{Task}[_{name}]_v{version}.{SEQ}.ifd'
+        root_name: 'quaternary'
+
+    houdini_shot_dcm:
+        definition: '@shot_root/{Task}/houdini/dcms/{Shot}_{Step}_{Task}[_{name}]/{houdini.node}/v{version}/{width}x{height}/{Shot}_{Step}_{Task}[_{name}]_v{version}.{SEQ}.dcm'
+        root_name: 'quaternary'
+
+    houdini_shot_extra_plane:
+        definition: '@shot_root/comp/renders/{Step}/{Task}/houdini/images/{Shot}_{Step}_{Task}[_{name}]/{houdini.node}/{aov_name}/v{version}/{width}x{height}/{Shot}_{Step}_{Task}[_{name}]_v{version}.{SEQ}.exr'
+        root_name: 'primary'
+
+
+    ##############
+    # 3dsmax
+    ##############
+
+    # define the location of a work area
+    shot_work_area_max:
+        definition: '@shot_root/{Task}/3dsmax/work'
+        root_name: 'secondary'
+    # define the location of a publish area
+    shot_publish_area_max:
+        definition: '@shot_root/{Task}/3dsmax/publish'
+        root_name: 'secondary'
+    # The location of WIP files
+    max_shot_work:
+        definition: '@shot_root/{Task}/3dsmax/work/{Shot}_{Step}_{Task}[_{name}]_v{version}.max'
+        root_name: 'secondary'
+    # The location of backups of WIP files
+    max_shot_snapshot:
+        definition: '@shot_root/{Task}/3dsmax/work/snapshots/{Shot}_{Step}_{Task}[_{name}]_v{version}.{timestamp}.max'
+        root_name: 'secondary'
+    # The location of published max files
+    max_shot_publish:
+        definition: '@shot_root/{Task}/3dsmax/publish/{Shot}_{Step}_{Task}[_{name}]_v{version}.max'
+        root_name: 'secondary'
+
+
+    ##############
+    # Motionbuilder
+    ##############
+
+    # define the location of a work area
+    shot_work_area_mobu:
+        definition: '@shot_root/{Task}/mobu/work'
+        root_name: 'secondary'
+    # define the location of a publish area
+    shot_publish_area_mobu:
+        definition: '@shot_root/{Task}/mobu/publish'
+        root_name: 'secondary'
+    # The location of WIP files
+    mobu_shot_work:
+        definition: '@shot_root/{Task}/mobu/work/{Shot}_{Step}_{Task}[_{name}]_v{version}.fbx'
+        root_name: 'secondary'
+    # The location of backups of WIP files
+    mobu_shot_snapshot:
+        definition: '@shot_root/{Task}/mobu/work/snapshots/{Shot}_{Step}_{Task}[_{name}]_v{version}.{timestamp}.fbx'
+        root_name: 'secondary'
+    # The location of published mobu files
+    mobu_shot_publish:
+        definition: '@shot_root/{Task}/mobu/publish/{Shot}_{Step}_{Task}[_{name}]_v{version}.fbx'
+        root_name: 'secondary'
+
+
+    ##############
+    # Nuke
+    ##############
+
+    # define the location of a work area
+    shot_work_area_nuke:
+        definition: '@shot_root/{Task}/nuke/work'
+        root_name: 'primary'
+    # define the location of a publish area
+    shot_publish_area_nuke:
+        definition: '@shot_root/{Task}/nuke/publish'
+        root_name: 'primary'
+    # The location of WIP script files
+    nuke_shot_work:
+        definition: '@shot_root/{Task}/nuke/work/{Shot}_{Step}_{Task}[_{name}]_v{version}.nk'
+        root_name: 'primary'
+    # The location of backups of WIP files
+    nuke_shot_snapshot:
+        definition: '@shot_root/{Task}/nuke/work/snapshots/{Shot}_{Step}_{Task}[_{name}]_v{version}.{timestamp}.nk'
+        root_name: 'primary'
+    # The location of published nuke script files
+    nuke_shot_publish:
+        definition: '@shot_root/{Task}/nuke/publish/{Shot}_{Step}_{Task}[_{name}]_v{version}.nk'
+        root_name: 'primary'
+    # write node outputs
+    nuke_shot_render_mono_dpx:
+        definition: '@shot_root/renders/{Step}/{Task}/v{version}/{width}x{height}/{Shot}_{Step}_{Task}[_{name}]_{nuke.output}_v{version}.{SEQ}.exr'
+        root_name: 'primary'
+    nuke_shot_render_pub_mono_dpx:
+        definition: '@shot_root/publish/{Step}/{Task}/v{version}/{width}x{height}/{Shot}_{Step}_{Task}[_{name}]_{nuke.output}_v{version}.{SEQ}.exr'
+        root_name: 'primary'
+    nuke_shot_render_stereo:
+        definition: '@shot_root/renders/{Step}/{Task}/v{version}/{width}x{height}/{Shot}_{Step}_{Task}[_{name}]_{nuke.output}_{eye}_v{version}.{SEQ}.exr'
+        root_name: 'primary'
+    nuke_shot_render_pub_stereo:
+        definition: '@shot_root/publish/{Step}/{Task}/v{version}/{width}x{height}/{Shot}_{Step}_{Task}[_{name}]_{nuke.output}_{eye}_v{version}.{SEQ}.exr'
+        root_name: 'primary'
+    # review output
+    shot_quicktime_quick:
+        definition: '@shot_root/{Task}/nuke/review/quickdaily/{Shot}_{Step}_{Task}[_{name}]_{iteration}.mov'
+        root_name: 'primary'
+    nuke_shot_render_movie:
+        definition: '@shot_root/{Task}/nuke/review/{Shot}_{Step}_{Task}[_{name}]_{nuke.output}_v{version}.mov'
+        root_name: 'primary'
+
+    ##############
+    # Hiero
+    ##############
+
+    # export of shot asset data from hiero
+    hiero_plate_path:
+        definition: 'sequences/{Sequence}/{Shot}/editorial/{YYYY}_{MM}_{DD}/plates/{Sequence}_{Shot}.mov'
+        root_name: 'primary'
+    hiero_render_path:
+        definition: 'sequences/{Sequence}/{Shot}/editorial/{YYYY}_{MM}_{DD}/renders/{Sequence}_{Shot}.{SEQ}.exr'
+        root_name: 'primary'
+
+    #############################################################################################################################################
+    # Asset pipeline
+    #############################################################################################################################################
+
+    ##############
+    # Alembic caches
+    ##############
+
+    asset_alembic_cache:
+        definition: '@asset_root/{Task}/publish/alembic/{Asset}_{Step}_{Task}[_{name}]_v{version}.abc'
+        root_name: 'secondary'
+
+
+    ##############
+    # Photoshop
+    ##############
+
+    # The location of WIP files
+    photoshop_asset_work:
+        definition: '@asset_root/{Task}/photoshop/work/{Asset}_{Step}_{Task}[_{name}]_v{version}.psd'
+        root_name: 'secondary'
+    asset_work_area_photoshop:
+        definition: '@asset_root/{Task}/photoshop/work'
+        root_name: 'secondary'
+    # The location of backups of WIP files
+    photoshop_asset_snapshot:
+        definition: '@asset_root/{Task}/photoshop/work/snapshots/{Asset}_{Step}_{Task}[_{name}]_v{version}_{timestamp}.psd'
+        root_name: 'secondary'
+    # The location of published files
+    asset_publish_area_photoshop:
+        definition: '@asset_root/{Task}/photoshop/publish'
+        root_name: 'secondary'
+    photoshop_asset_publish:
+        definition: '@asset_root/{Task}/photoshop/publish/{Asset}_{Step}_{Task}[_{name}]_v{version}.psd'
+        root_name: 'secondary'
+
+
+    ##############
+    # Mari
+    ##############
+    asset_mari_texture_tif:
+        definition: '@asset_root/{Task}/publish/mari/{Asset}_{Step}_{Task}[_{name}]_{mari.channel}[_{mari.layer}]_v{version}.{UDIM}.tif'
+        root_name: 'secondary'
+
+    ##############
+    # Maya
+    ##############
+
+    # define the location of a work area
+    asset_work_area_maya:
+        definition: '@asset_root/{Task}/maya/work'
+        root_name: 'secondary'
+    # define the location of a publish area
+    asset_publish_area_maya:
+        definition: '@asset_root/{Task}/maya/publish'
+        root_name: 'secondary'
+    # The location of WIP files
+    maya_asset_work:
+        definition: '@asset_root/{Task}/maya/work/{Asset}_{Step}_{Task}[_{name}]_v{version}.{maya_extension}'
+        root_name: 'secondary'
+    # The location of backups of WIP files
+    maya_asset_snapshot:
+        definition: '@asset_root/{Task}/maya/work/snapshots/{Asset}_{Step}_{Task}[_{name}]_v{version}_{timestamp}.{maya_extension}'
+        root_name: 'secondary'
+    # The location of published maya files
+    maya_asset_publish:
+        definition: '@asset_root/{Task}/maya/publish/{Asset}_{Step}_{Task}[_{name}]_v{version}.{maya_extension}'
+        root_name: 'secondary'
+
+
+    ##############
+    # Houdini
+    ##############
+
+    # define the location of a work area
+    asset_work_area_houdini:
+        definition: '@asset_root/{Task}/houdini/work'
+        root_name: 'quaternary'
+    # define the location of a publish area
+    asset_publish_area_houdini:
+        definition: '@asset_root/{Task}/houdini/publish'
+        root_name: 'quaternary'
+    # The location of WIP files
+    houdini_asset_work:
+        definition: '@asset_root/{Task}/houdini/work/{Asset}_{Step}_{Task}[_{name}]_v{version}.hip'
+        root_name: 'quaternary'
+    # The location of backups of WIP files
+    houdini_asset_snapshot:
+        definition: '@asset_root/{Task}/houdini/work/snapshots/{Asset}_{Step}_{Task}[_{name}]_v{version}_{timestamp}.hip'
+        root_name: 'quaternary'
+    # The location of published houdini files
+    houdini_asset_publish:
+        definition: '@asset_root/{Task}/houdini/publish/{Asset}_{Step}_{Task}[_{name}]_v{version}.hip'
+        root_name: 'quaternary'
+    # Alembic caches
+    houdini_asset_work_alembic_cache:
+        definition: '@asset_root/{Task}/houdini/work/cache/alembic/{name}/{houdini.node}/v{version}/{Asset}_{Step}_{Task}[_{name}]_v{version}.abc'
+        root_name: 'quaternary'
+
+    # Rendered images
+    houdini_asset_render:
+        definition: '@asset_root/{Task}/houdini/renders/{Asset}_{Step}_{Task}[_{name}]/{houdini.node}/v{version}/{width}x{height}/{Asset}_{Step}_{Task}[_{name}]_v{version}.{SEQ}.exr'
+        root_name: 'quaternary'
+
+    # Additional mantra outputs
+    houdini_asset_ifd:
+        definition: '@asset_root/{Task}/houdini/ifds/{Asset}_{Step}_{Task}[_{name}]/{houdini.node}/v{version}/{width}x{height}/{Asset}_{Step}_{Task}[_{name}]_v{version}.{SEQ}.ifd'
+        root_name: 'quaternary'
+
+    houdini_asset_dcm:
+        definition: '@asset_root/{Task}/houdini/dcms/{Asset}_{Step}_{Task}[_{name}]/{houdini.node}/v{version}/{width}x{height}/{Asset}_{Step}_{Task}[_{name}]_v{version}.{SEQ}.dcm'
+        root_name: 'quaternary'
+
+    houdini_asset_extra_plane:
+        definition: '@asset_root/{Task}/houdini/renders/{Asset}_{Step}_{Task}[_{name}]/{houdini.node}/{aov_name}/v{version}/{width}x{height}/{Asset}_{Step}_{Task}[_{name}]_v{version}.{SEQ}.exr'
+        root_name: 'quaternary'
+
+
+    ##############
+    # 3dsmax
+    ##############
+
+    # define the location of a work area
+    asset_work_area_max:
+        definition: '@asset_root/{Task}/3dsmax/work'
+        root_name: 'secondary'
+    # define the location of a publish area
+    asset_publish_area_max:
+        definition: '@asset_root/{Task}/3dsmax/publish'
+        root_name: 'secondary'
+    # The location of WIP files
+    max_asset_work:
+        definition: '@asset_root/{Task}/3dsmax/work/{Asset}_{Step}_{Task}[_{name}]_v{version}.max'
+        root_name: 'secondary'
+    # The location of backups of WIP files
+    max_asset_snapshot:
+        definition: '@asset_root/{Task}/3dsmax/work/snapshots/{Asset}_{Step}_{Task}[_{name}]_v{version}_{timestamp}.max'
+        root_name: 'secondary'
+    # The location of published max files
+    max_asset_publish:
+        definition: '@asset_root/{Task}/3dsmax/publish/{Asset}_{Step}_{Task}[_{name}]_v{version}.max'
+        root_name: 'secondary'
+
+
+    ##############
+    # Motionbuilder
+    ##############
+
+    # define the location of a work area
+    asset_work_area_mobu:
+        definition: '@asset_root/{Task}/mobu/work'
+        root_name: 'secondary'
+    # define the location of a publish area
+    asset_publish_area_mobu:
+        definition: '@asset_root/{Task}/mobu/publish'
+        root_name: 'secondary'
+    # The location of WIP files
+    mobu_asset_work:
+        definition: '@asset_root/{Task}/mobu/work/{Asset}_{Step}_{Task}[_{name}]_v{version}.fbx'
+        root_name: 'secondary'
+    # The location of backups of WIP files
+    mobu_asset_snapshot:
+        definition: '@asset_root/{Task}/mobu/work/snapshots/{Asset}_{Step}_{Task}[_{name}]_v{version}_{timestamp}.fbx'
+        root_name: 'secondary'
+    # The location of published Motionbuilder files
+    mobu_asset_publish:
+        definition: '@asset_root/{Task}/mobu/publish/{Asset}_{Step}_{Task}[_{name}]_v{version}.fbx'
+        root_name: 'secondary'
+
+
+    ##############
+    # Nuke
+    ##############
+
+    # define the location of a work area
+    asset_work_area_nuke:
+        definition: '@asset_root/{Task}/nuke/work'
+        root_name: 'secondary'
+    # define the location of a publish area
+    asset_publish_area_nuke:
+        definition: '@asset_root/{Task}/nuke/publish'
+        root_name: 'secondary'
+    # outputs from the Shotgun Write Node for assets
+    nuke_asset_render:
+        definition: '@asset_root/{Task}/renders/{Step}/{Task}/v{version}/{width}x{height}/{Asset}_{Step}_{Task}[_{name}]_{nuke.output}_v{version}.{SEQ}.exr'
+        root_name: 'secondary'
+    nuke_asset_render_pub:
+        definition: '@asset_root/{Task}/publish/{Step}/{Task}/v{version}/{width}x{height}/{Asset}_{Step}_{Task}[_{name}]_{nuke.output}_v{version}.{SEQ}.exr'
+        root_name: 'secondary'
+    # review output
+    nuke_asset_render_movie:
+        definition: '@asset_root/{Task}/nuke/review/{Asset}_{Step}_{Task}[_{name}]_{nuke.output}_v{version}.mov'
+        root_name: 'secondary'
+    asset_quicktime_quick:
+        definition: '@asset_root/{Task}/nuke/review/quickdaily/{Asset}_{Step}_{Task}[_{name}]_{iteration}.mov'
+        root_name: 'secondary'
+    # The location of WIP script files
+    nuke_asset_work:
+        definition: '@asset_root/{Task}/nuke/work/{Asset}_{Step}_{Task}[_{name}]_v{version}.nk'
+        root_name: 'secondary'
+    # The location of backups of WIP files
+    nuke_asset_snapshot:
+        definition: '@asset_root/{Task}/nuke/work/snapshots/{Asset}_{Step}_{Task}[_{name}]_v{version}.{timestamp}.nk'
+        root_name: 'secondary'
+    # The location of published nuke script files
+    nuke_asset_publish:
+        definition: '@asset_root/{Task}/nuke/publish/{Asset}_{Step}_{Task}[_{name}]_v{version}.nk'
+        root_name: 'secondary'
+
+
+#
+# The strings section is similar to the paths section - but rather than defining paths
+# on disk, it contains a list of strings. Strings are typically used when you want to be
+# able to configure the way data is written to shotgun - it may be the name field for a
+# review version or the formatting of a publish.
+#
+
+strings:
+
+    # when a review Version in Shotgun is created inside of Nuke, this is the
+    # name that is being given to it (the code field)
+    nuke_shot_version_name: "{Shot}_{Step}_{Task}[_{name}]_{nuke.output}_v{version}.{iteration}"
+    nuke_quick_shot_version_name: "{Shot}_{Step}_{Task}[_{name}]_quick_{iteration}"
+
+    nuke_asset_version_name: "{Asset}_{Step}_{Task}[_{name}]_{nuke.output}_v{version}.{iteration}"
+    nuke_quick_asset_version_name: "{Asset}_{Step}_{Task}[_{name}]_quick_{iteration}"
+
+    # defines how the {tk_version} token in Hiero gets formatted back to tk.
+    hiero_version: "{version}"
+
+    # define how new Mari projects should be named
+    mari_asset_project_name: "{mari.project_name} - Asset {asset_name}, {task_name}"
