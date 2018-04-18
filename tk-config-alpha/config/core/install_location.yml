@@ -3,7 +3,7 @@
 # This file reflects the paths in the primary pipeline
 # configuration defined for this project.
 
-Windows: 'Z:\SHOTGUN\configurations\craterdefault'
+Windows: 'C:\repo\tk-config-alpha\tk-config-alpha'
 Darwin: ''
 Linux: ''
 
