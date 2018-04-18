@@ -101,3 +101,7 @@ venv/
 # project specific
 /tk-config-alpha/cache
 /tk-config-alpha/install
+
+# shotgun specific
+install_location.yml
+pipeline_configuration.yml
