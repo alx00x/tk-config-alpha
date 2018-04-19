@@ -57,7 +57,7 @@ class SceneOperation(HookClass):
                                 all others     - None
         """
 
-        print "------------ TEST MSG PRINT --------------"
+        print parent_action
 
         if operation == "current_path":
             # return the current scene path
