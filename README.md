@@ -1,3 +1,3 @@
 # tk-config-alpha
 
-This is a testing repo.
+This is no more testing repo.

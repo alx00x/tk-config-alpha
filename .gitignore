@@ -1,4 +1,4 @@
-# Byte-compiled / optimized / DLL files
+### bYte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
@@ -101,3 +101,4 @@ venv/
 # project specific
 /tk-config-alpha/cache
 /tk-config-alpha/install
+*.zip  
