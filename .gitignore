@@ -101,3 +101,4 @@ venv/
 # project specific
 /tk-config-alpha/cache
 /tk-config-alpha/install
+*.zip  
