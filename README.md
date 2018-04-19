@@ -1,5 +1,3 @@
 # tk-config-alpha
 
-This is no more testing repo.
- 
- 333
+This is still just a testing repo.
