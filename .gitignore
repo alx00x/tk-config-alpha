@@ -103,6 +103,5 @@ venv/
 /tk-config-alpha/install
 
 # shotgun specific
-install_location.yml
-pipeline_configuration.yml
-*.zip
+# install_location.yml
+# pipeline_configuration.yml
