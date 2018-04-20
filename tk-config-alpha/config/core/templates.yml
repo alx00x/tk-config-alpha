@@ -154,6 +154,7 @@ paths:
     shot_root: sequences/{Sequence}/{Shot}/{Step}
     asset_root: assets/{sg_asset_type}/{Asset}/{Step}
     sequence_root: sequences/{Sequence}
+    
     # Crater addition ========================================================================
     plugins_root: z:/PLUGINS_ROOT
     shot_temp_data_root: sequences/{Sequence}/{Shot}/{Step}/{Task}/review/tmp_data
@@ -192,49 +193,11 @@ paths:
     # CRATER PLAYBLAST stuff ===================================================================================================
     ############################
     
-    #shot Playblast path for JPG image sequence which is used as a temporary step to create a shot quicktime playblast file
-    shot_playblastJPG:
-        definition: '@shot_review_root/tmp/{Shot}_{Step}_{Task}[_{name}]_v{version}'
+       
+    #shot playblast file 
+    shot_playblast_file_name:
+        definition: 'sequences/shared/nuke_templates/{Shot}_{Step}_{Task}[_{name}]_v{version}.mov'
         root_name: 'secondary'
-    houdini_shot_playblastJPG:
-        definition: '@shot_review_root/tmp/{Shot}_{Step}_{Task}[_{name}]_v{version}'
-        root_name: 'quaternary'
-    nuke_shot_playblastJPG:
-        definition: '@shot_review_root/tmp/{Shot}_{Step}_{Task}[_{name}]_v{version}'
-        root_name: 'primary'
-    #shot quicktime playblast file 
-    shot_playblast:
-        definition: '@shot_review_root/{Shot}_{Step}_{Task}[_{name}]_v{version}.mov'
-        root_name: 'secondary'
-    houdini_shot_playblast:
-        definition: '@shot_review_root/{Shot}_{Step}_{Task}[_{name}]_v{version}.mov'
-        root_name: 'quaternary'
-    nuke_shot_playblast:
-        definition: '@shot_review_root/{Shot}_{Step}_{Task}[_{name}]_v{version}.mov'
-        root_name: 'primary'
-        
-        
-        
-    #asset Playblast path for JPG image sequence which is used as a temporary step to create a asset quicktime playblast file
-    asset_playblastJPG:
-        definition: '@asset_review_root/tmp/{Asset}_{Step}_{Task}[_{name}]_v{version}'
-        root_name: 'secondary'
-    houdini_asset_playblastJPG:
-        definition: '@asset_review_root/tmp/{Asset}_{Step}_{Task}[_{name}]_v{version}'
-        root_name: 'quaternary'
-    nuke_asset_playblastJPG:
-        definition: '@asset_review_root/tmp/{Asset}_{Step}_{Task}[_{name}]_v{version}'
-        root_name: 'primary'        
-    #asset quicktime playblast file 
-    asset_playblast:
-        definition: '@asset_review_root/{Asset}_{Step}_{Task}[_{name}]_v{version}.mov'
-        root_name: 'secondary'
-    houdini_asset_playblast:
-        definition: '@asset_review_root/{Asset}_{Step}_{Task}[_{name}]_v{version}.mov'
-        root_name: 'quaternary'
-    nuke_asset_playblast:
-        definition: '@asset_review_root/{Asset}_{Step}_{Task}[_{name}]_v{version}.mov'
-        root_name: 'primary'
         
         
     #location for shots nuke playblast template    
