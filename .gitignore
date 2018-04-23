@@ -100,7 +100,8 @@ venv/
 
 # project specific
 /tk-config-alpha/cache
-/tk-config-alpha/install
+# /tk-config-alpha/install
+/tk-config-alpha/install__
 
 # shotgun specific
 # install_location.yml
