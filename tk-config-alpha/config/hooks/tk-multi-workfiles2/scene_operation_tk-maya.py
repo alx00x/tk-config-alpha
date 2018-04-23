@@ -57,7 +57,27 @@ class SceneOperation(HookClass):
                                 all others     - None
         """
 
-        print "------------ TEST MSG PRINT --------------"
+        # CRATER CHANGE START
+
+        print "--------------------------------------------------------------"
+
+        self.logger.info("operation is: " + str(operation))
+        self.logger.info("file_path is: " + str(file_path))
+        self.logger.info("context is: " + str(context))
+        self.logger.info("parent_action is: " + str(parent_action))
+        self.logger.info("file_version is: " + str(file_version))
+        self.logger.info("read_only is: " + str(read_only))
+
+
+        current_engine = sgtk.platform.current_engine().name
+
+        # check current DCC app and run only if new file is being created
+        if current_engine == "tk-maya" and parent_action == "new_file" and operation == "prepare_new":
+            # get scene parameters from shotgun and apply
+            
+
+        # CRATER CHANGE END
+
 
         if operation == "current_path":
             # return the current scene path
