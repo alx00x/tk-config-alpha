@@ -155,10 +155,9 @@ paths:
     asset_root: assets/{sg_asset_type}/{Asset}/{Step}
     sequence_root: sequences/{Sequence}
     
-    # Crater addition ========================================================================
+    # Crater addition ================================================================================
     plugins_root: z:/PLUGINS_ROOT
-    shot_temp_data_root: sequences/{Sequence}/{Shot}/{Step}/{Task}/review/tmp_data
-    asset_temp_data_root: assets/{sg_asset_type}/{Asset}/{Step}/{Task}/review/tmp_data
+
     # Shotgun scripts location
     sg_scripts_path:
         definition: '@plugins_root/shotgun_scripts'
@@ -186,40 +185,24 @@ paths:
 
 
     ##########################################################################################
-    # Project level paths
-    #
+    # PROJECT LEVEL PATHS
+    ##########################################################################################
         
     ############################
     # CRATER PLAYBLAST stuff ===================================================================================================
     ############################
-    
-       
-    #shot playblast file 
-    shot_playblast_file_name:
-        definition: 'sequences/shared/nuke_templates/{Shot}_{Step}_{Task}[_{name}]_v{version}.mov'
-        root_name: 'secondary'
-        
         
     #location for shots nuke playblast template    
     playblast_nuke_template:
         definition: 'sequences/shared/nuke_templates/playblast_template.nk'
         root_name: 'secondary'
+        
     #if a project does not have shotsNukeTemplate then defaultShotsNukeTemplate is used
     playblast_default_nuke_template:
         definition: '@plugins_root/playblast_template/playblast_template_v002.nk'
         root_name: 'secondary'
-        
-    #temp python files 
-#    temp_data_py:
-#        definition: '@shot_temp_data_root/{Shot}_{Step}_{Task}[_{name}]_v{version}.py'
-#        root_name: 'secondary'
-#    houdini_temp_data_py:
-#        definition: '@shot_temp_data_root/{Shot}_{Step}_{Task}[_{name}]_v{version}.py'
-#        root_name: 'quaternary'
-#    nuke_temp_data_py:
-#        definition: '@shot_temp_data_root/{Shot}_{Step}_{Task}[_{name}]_v{version}.py'
-#        root_name: 'primary'
-        
+     
+
     #deadline presets location
     pb_dl_presets_job_info:
         definition: '@plugins_root/deadline_presets/playblast/job_info.txt'
@@ -228,26 +211,7 @@ paths:
         definition: '@plugins_root/deadline_presets/playblast/plugin_info_v02.txt'
         root_name: 'secondary' 
         
-    #deadline temp locations
-#    pb_dl_temp_job_info:
-#        definition: '@shot_temp_data_root/job_info.txt'
-#        root_name: 'secondary'
-#    houdini_pb_dl_temp_job_info:
-#        definition: '@shot_temp_data_root/job_info.txt'
-#        root_name: 'quaternary'
-#    nuke_pb_dl_temp_job_info:
-#        definition: '@shot_temp_data_root/job_info.txt'
-#        root_name: 'primary'
-        
-#    pb_dl_temp_postscript:
-#        definition: '@shot_temp_data_root/dlPostScript.py'
-#        root_name: 'secondary'
-#    houdini_pb_dl_temp_postscript:
-#        definition: '@shot_temp_data_root/dlPostScript.py'
-#        root_name: 'quaternary'
-#    nuke_pb_dl_temp_postscript:
-#        definition: '@shot_temp_data_root/dlPostScript.py'
-#        root_name: 'primary'
+
         
         
     #==================================================================================================================
@@ -279,12 +243,12 @@ paths:
     
 
     ##########################################################################################
-    # Sequence level paths
-    #
+    # SEQUENCE LEVEL PATHS
+    ##########################################################################################
 
 
     ###################################################################################################################################
-    # Shot level paths
+    # SHOT LEVEL PATHS
     ###################################################################################################################################
 
     ##############
@@ -362,7 +326,6 @@ paths:
         definition: '@shot_root/{Task}/maya/publish/{Shot}_{Step}_{Task}[_{name}]_v{version}.{maya_extension}'
         root_name: 'secondary'
     # CRATER additions ================================================================================================
-    
     # The location of published maya CAMERA files 
     maya_shot_camera:
         definition: '@shot_root/camera/{Shot}_{Step}_{Task}[_{name}]_{cam_name}_v{version}.ma'
@@ -530,8 +493,11 @@ paths:
         definition: 'sequences/{Sequence}/{Shot}/editorial/{YYYY}_{MM}_{DD}/renders/{Sequence}_{Shot}.{SEQ}.exr'
         root_name: 'primary'
 
+
+
+
     #############################################################################################################################################
-    # Asset pipeline
+    # ASSET PIPELINE
     #############################################################################################################################################
 
     ##############

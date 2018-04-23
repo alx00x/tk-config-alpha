@@ -13,6 +13,11 @@ import os
 import maya.cmds as cmds
 import maya.mel as mel
 import sgtk
+import sys
+# crater scripts import
+shotgun_scripts = os.path.join(os.environ['CRATER_SCRIPTS'], "shotgun_scripts")
+sys.path.append(shotgun_scripts)
+import context_info 
 
 HookBaseClass = sgtk.get_hook_baseclass()
 
@@ -277,36 +282,9 @@ class MayaSessionCollector(HookBaseClass):
         ctx = engine.context
         tk = sgtk.sgtk_from_entity('Project', ctx.project['id'])
 
-        if ctx.entity['type'] == 'Asset':
-            if engine.name == 'tk-nuke':
-                asset_review_root_templ_obj = tk.templates["nuke_asset_review_root"]
-                fields = ctx.as_template_fields( asset_review_root_templ_obj )
-                asset_review_root_path = asset_review_root_templ_obj.apply_fields( fields )        
-            elif engine.name == 'tk-houdini':
-                asset_review_root_templ_obj = tk.templates["houdini_asset_review_root"]
-                fields = ctx.as_template_fields( asset_review_root_templ_obj )
-                asset_review_root_path = asset_review_root_templ_obj.apply_fields( fields )        
-            else:
-                asset_review_root_templ_obj = tk.templates["asset_review_root"]
-                fields = ctx.as_template_fields( asset_review_root_templ_obj )
-                asset_review_root_path = asset_review_root_templ_obj.apply_fields( fields )
-            movies_dir = asset_review_root_path
-                
-        if ctx.entity['type'] == 'Shot':       
-            if engine.name == 'tk-nuke':       
-                shot_review_root_templ_obj = tk.templates["nuke_shot_review_root"]
-                fields = ctx.as_template_fields( shot_review_root_templ_obj )
-                shot_review_root_path = shot_review_root_templ_obj.apply_fields( fields )
-            elif engine.name == 'tk-houdini':        
-                shot_review_root_templ_obj = tk.templates["houdini_shot_review_root"]
-                fields = ctx.as_template_fields( shot_review_root_templ_obj )
-                shot_review_root_path = shot_review_root_templ_obj.apply_fields( fields )
-            else:
-                shot_review_root_templ_obj = tk.templates["shot_review_root"]
-                fields = ctx.as_template_fields( shot_review_root_templ_obj )
-                shot_review_root_path = shot_review_root_templ_obj.apply_fields( fields )
-            movies_dir = shot_review_root_path
-            #===============================================================================================    
+        movies_dir = os.path.join( context_info.get_review_root_path(ctx.entity['type'], ctx), 'tmp', 'maya' )
+ 
+        #===============================================================================================    
 
                 
         self.logger.info(
@@ -324,7 +302,7 @@ class MayaSessionCollector(HookBaseClass):
         # ==================================================================================================
         item = super(MayaSessionCollector, self)._collect_folder(
             parent_item,
-            movies_dir + '/tmp',
+            movies_dir,
             is_playblast = True
         )
 

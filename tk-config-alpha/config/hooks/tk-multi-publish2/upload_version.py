@@ -16,10 +16,9 @@ import sgtk
 # Crater addition ====================================================================
 # add path where to find Crater shotgun scripts 
 #=====================================================================================
-engine = sgtk.platform.current_engine()
-tk = sgtk.sgtk_from_entity('Project', engine.context.project['id'])
-templ = tk.templates["sg_scripts_path"]
-sys.path.append(templ.definition)
+
+shotgun_scripts = os.path.join(os.environ['CRATER_SCRIPTS'], "shotgun_scripts")
+sys.path.append(shotgun_scripts)
 
 #QT imports
 from Qt import QtWidgets
