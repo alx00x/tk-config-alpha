@@ -25,6 +25,11 @@ engines.tk-desktop.location:
   name: tk-desktop
   version: v2.4.6
 
+# engines.tk-desktop.location:
+#   name: tk-desktop
+#   type: dev
+#   path: '{CONFIG_FOLDER}/dev/tk-desktop'
+
 # Flame
 engines.tk-flame.location:
   type: app_store
