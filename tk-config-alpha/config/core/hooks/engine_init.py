@@ -24,4 +24,8 @@ class EngineInit(Hook):
         At this point, all applications and frameworks have been loaded,
         and the engine is fully operational.
         """
-        pass
+        
+        # you can set environment variables like this:
+        # os.environ["MY_SETTING"] = "foo bar"
+        os.environ["CRATER_SCRIPTS"] = "Z:/PLUGINS_ROOT"
+        os.environ["NUKE_PATH"] = "Z:/PLUGINS_ROOT/NUKE_CONFIG"

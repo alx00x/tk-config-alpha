@@ -44,5 +44,5 @@ class BeforeAppLaunch(tank.Hook):
         
         # you can set environment variables like this:
         # os.environ["MY_SETTING"] = "foo bar"
-        os.environ["CRATER_SCRIPTS"] = "Z:/PLUGINS_ROOT"
-        os.environ["NUKE_PATH"] = "Z:/PLUGINS_ROOT/NUKE_CONFIG"
+        # os.environ["CRATER_SCRIPTS"] = "Z:/PLUGINS_ROOT"
+        # os.environ["NUKE_PATH"] = "Z:/PLUGINS_ROOT/NUKE_CONFIG"
